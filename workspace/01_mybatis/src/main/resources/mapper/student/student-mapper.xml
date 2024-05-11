@@ -1,34 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	
-<!-- 
-	mapper가 root태그로 namespace속성을 가진다.
-	namespace속성 : 외부(javacode)mapper를 인식하는 id값 * 반드시 설정해야함.
+<!-- mapper가 root태그로 namespace속성을 가진다
+	 namespace속성 : 외부(javacode)mapper를 인식하는 id값 * 반드시 설정해야함.
  -->
-	
+
 <mapper namespace="student">
-	<!-- 실행할 sql문 작성 
-		mapper에서 제공하는 태그를 이용
-		<select> select문을 작성했을 때 사용
-		<insert> insert문을 작성했을 때 
-		<update> update문을 작성했을 때 
-		<delete> delete문을 작성했을 때 
+	<!-- 실행할 sql문 작성  
+		<select> : select문을 작성했을때 사용
+		<insert> : insert문을 작성했을때
+		<update> : update문을 작성했을때
+		<delete> : delete문을 작성했을때
 		* 모든 태그에는 id속성을 반드시 설정 -> sql문을 지정하는 id값
-		parameterType : 외부에서 전달받은 데이터에 대한 타입 설정
+		parameterType : 외부에서 전달받은 데이터에 대한 타입을 설정
 		select문의 결과를 매핑해주는 객체의 Type 설정할때
 		resultType, resultMap 
-	 -->
+	-->
 	<insert id="insertStudent">
-		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL,'유병승','01012341234', 
-		'teacher@teacher.com','경기도 안양시',SYSDATE)
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL,'유병승',
+		'01012341234','teacher@teacher.com','경기도 안양시', SYSDATE)
 	</insert>
-	<!-- 외부에서 전달된 값이 있는 경우 parameterType 속성을 설정
-		mybatis 별칭타입을 작성
-	 -->
+	<!-- 외부에서 전달된 값이 있는 경우 parameterTyp속성을 설정 
+			mybatis 별칭타입을 작성
+	-->
 	<insert id="insertStudentByName" parameterType="string">
-		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL,#{name},'01012341234', 
-		'teacher@teacher.com','경기도 안양시',SYSDATE)
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL,#{name},
+		'01012341234','teacher@teacher.com','경기도 안양시', SYSDATE)
+	</insert>
+	<!-- Dao에서 두번째 파라미터는 전달했을때는 parameterType="" 설정 
+		 클래스를 parameterType으로 작성할때는 패키지명.클래스명으로 작성해야함
+		 객체가 넘어왔을때는 값을 가져올떄 #{필드명}로 작성
+	-->
+	<insert id="insertStudentAll" parameterType="com.mybatis.model.vo.Student">
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL,
+		#{studentName},#{studentTel},#{studentAddr},#{studentEmail}, SYSDATE)
 	</insert>
 	
+	<!-- select사용하기
+		<select>태그
+		속성
+		id : 
+		parameterType :
+		resultSet의 데이터를 mapping해줄 타입을 선언
+		resultType : 매핑할 클래스의 필드명이 컬럼명과 동일할때 사용
+		resultMap : 매핑할 클래스의 필드명과 컬럼명이 다를때 사용
+			-> resultMap태그를 이용해서 매핑용 객체를 선언
+	 -->
+	 
+	<!-- resultMap선언하기
+		테이블 컬럼병과 클래스의 필드명이 다를때 매칭시켜주는 태그
+		id태그 -> pk컬럼에 대한 매칭을 할때 사용
+		result태그 -> 일반컬럼에 대한 매칭을 할떄 사용 
+		collection태그 -> has a관계에 있는 클래스를 매칭할때 -> List타입
+		assoctation	-> has a관계에 있는 클래스를 매칭할때 -> 일반클래스
+	
+	 -->
+	 
+	 <resultMap id="studentMap" type="com.mybatis.model.vo.Student">
+	 	<id column="student_no" property="studentNo"/>
+	 	<result column="student_name" property="studentName"/>
+	 	<result column="student_tel" property="studentTel"/>
+	 	<result column="student_email" property="studentEmail"/>
+	 	<result column="student_addr" property="studentAddr"/>
+	 	<result column="reg_date" property="enrollDate"/>
+	 </resultMap>
+	 
+	 <select id="selectStudentCount" resultType="int">
+	 	SELECT COUNT(*) FROM STUDENT
+	 </select>
+	 
+	 
+	 
+	 <select id="selectStudentByNo" parameterType="_int" resultMap="studentMap">
+	 SELECT * FROM STUDENT WHERE STUDENT_NO=#{no}
+	 </select>
 </mapper>
