@@ -2,6 +2,8 @@ package com.mybatis.model.service;
 
 import static com.mybatis.common.SqlSessionTemplate.getSession;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 
 import com.mybatis.model.dao.StudentDao;
@@ -50,5 +52,11 @@ public class StudentService {
 		Student s = dao.selectStudentByNo(session,no);
 		session.close();
 		return s;
+	}
+	public List<Student> studentAll(int cPage, int numPerpage){
+		SqlSession session = getSession();
+		List<Student> result = dao.studentAll(session,cPage,numPerpage);
+		session.close();
+		return result;
 	}
 }

@@ -46,7 +46,7 @@
 	 </h4>
 	 <!-- 학생번호를 입력받아 학생 조회하기 -->
 	 
-	 
+	 <a href="${path }/student/studentall.do">전체학생조회</a>
 </body>
 </html>
 

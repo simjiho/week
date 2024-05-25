@@ -74,4 +74,34 @@
 	 <select id="selectStudentByNo" parameterType="_int" resultMap="studentMap">
 	 SELECT * FROM STUDENT WHERE STUDENT_NO=#{no}
 	 </select>
+	 
+	 <!-- 전제조회하는 sql -->
+	 
+	 <select id="studentAll" resultMap="studentMap">
+	 	SELECT * FROM STUDENT
+	 </select>
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

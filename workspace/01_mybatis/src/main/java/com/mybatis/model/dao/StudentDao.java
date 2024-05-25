@@ -1,5 +1,8 @@
 package com.mybatis.model.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
 import com.mybatis.model.vo.Student;
@@ -32,6 +35,22 @@ public class StudentDao {
 	}
 	public Student selectStudentByNo(SqlSession session, int no) {
 		return session.selectOne("student.selectStudentByNo",no);
+	}
+	
+	public List<Student> studentAll(SqlSession session, int cPage, int numPerpage){
+		//다수의 row를 조회한 결과를 가져오는 기능
+		//selectList()메소드를 이용한다.
+		//페이징처리를 위한 객체를 생성해줌.
+		//Rowbounds클래스를 이용해서 처리
+		//매게변수 있는 생성자를 이용해서 생성
+		//두개의 인자를 전달
+		//1 : offset : 시작 row번호를 전달(0부터 시작)
+			//-> (cPage-1)*numPerpage
+		//2 : limit : 간격 -> ->numPerpage
+		
+		RowBounds row = new RowBounds((cPage-1) *numPerpage, numPerpage);
+		
+		return session.selectList("student.studentAll",null,row);
 	}
 }
 
