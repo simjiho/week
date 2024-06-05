@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배열관리하기</title>
+</head>
+<body>
+    <script>
+        //Array객체
+        const data=[
+        {name:"심지호",age:"19",gender:"남",address:"경기도 군포시"},
+        {name:"윤호기",age:"39",gender:"남",address:"경기도 시흥시"},
+        {name:"성의영",age:"11",gender:"남",address:"경기도 안양시"},   
+        {name:"김진영",age:"15",gender:"여",address:"경기도 수원시"},
+        {name:"임호기",age:"25",gender:"여",address:"시골 촌구석"}
+    ];
+    
+       //배열에 저장된 데이터 순회하는 함수
+       //forEach(function(d[index,원본배열]){}); ==for(person p:person)
+       data.forEach(function(d){
+            console.log(d);
+       });
+       //filter(function(d[,index원본배열]){return boolean})
+       //배열에 저장된 데이터를 골라낼때 사용
+       console.log("한번에 출력하기")
+        //data.filter((d,i,ori)=>{
+            // return d.age>20;
+        //}).forEach(d=>console.log(d));
+       data.filter(d=>d.age>20).forEach(d=>console.log(d));
+       //console.log(result);
+
+       //map((data[,index,ori])=>{return 데이터; });
+       //새로운 구조의 데이터 배열을 생성할 때 사용
+       let result=data.map(d=>d.name)
+       console.log(result);
+
+    </script>
+    <ul id="target"></ul>
+    <button onclick="createNames();">출력하기</button>
+    <script>
+        const createNames=()=>{
+            const $ul=document.querySelector("#target");
+            data.filter(d=>d.age>20).map(d=>"<li>"+d.name+"</li>")
+            .forEach(d=>$ul.innerHTML+=d);
+            const $ul2=data.reduce((prev,next)=>{
+                const $li=document.createComment("li");
+                $li.innerText=next.address;
+                prev.appendChild($li);
+                return prev;
+            },document.createElement("ul"));
+            console.log($ul2);
+        }
+    </script>
+
+    <h4>promise활용하기</h4>
+    <script>
+        setTimeout(()=>{
+            console.log("첫번째 실행");
+            setTimeout(()=>{
+                console.log("두번째 실행");
+                setTimeout(()=>{
+                    console.log("세번째 실행");
+                    setTimeout(()=>{
+                    console.log("네번째 실행");
+                    },300);
+                },400);
+            },500);
+        },1000);
+        // setTimeout(()=>{
+        //     console.log("두번째 실행");
+        // },500);
+
+        const pro=new Promise((resolve,reject)=>{
+            setTimeout(() => {
+                console.log("pro 첫번째 실행");
+                resolve("처리완료");
+            }, 1000);
+        });
+        pro.then(e=>{
+            setTimeout(() => {
+                console.log("pro 두번째 실행");
+            }, 300);
+        })
+        .then(e=>{
+            setTimeout(() => {
+                console.log("pro 세번째 실행");
+            }, 200);
+        })
+
+
+        //async await에약어를 이용할 수 있음
+        const testAsync=async function(){
+            await time1();
+            await time2();
+            await time3();
+            return "종료";
+        }
+        const time1=()=>new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+                console.log("time 첫번째");
+            },1000);
+        });
+        const time2=()=>new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+                console.log("time 두번째");
+            },300);
+        });
+        const time3=()=>new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+                console.log("time 세번째");
+            },200);
+        });
+        testAsync().then(e=>console.log(e));
+
+
+
+
+        
+    </script>
+</body>
+</html>
